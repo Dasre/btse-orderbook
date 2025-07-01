@@ -1,0 +1,263 @@
+/* ==========================================================================
+   1. CSS Variables
+   ========================================================================== */
+:root {
+  /* Colors */
+  --bg-color: #131b29;
+  --text-color: #f0f4f8;
+  --quote-text-color: #8698aa;
+  --buy-quote-price-text-color: #00b15d;
+  --sell-quote-price-text-color: #ff5b5a;
+  --quote-hover-bg-color: #1e3059;
+
+  /* Depth Bars */
+  --buy-quote-bar-color: rgba(16, 186, 104, 0.12);
+  --sell-quote-bar-color: rgba(255, 90, 90, 0.12);
+
+  /* Flashes & Animations */
+  --flash-green-color: rgba(0, 177, 93, 0.5);
+  --flash-red-color: rgba(255, 91, 90, 0.5);
+  --last-price-up-bg: rgba(16, 186, 104, 0.12);
+  --last-price-down-bg: rgba(255, 90, 90, 0.12);
+  --last-price-same-bg: rgba(134, 152, 170, 0.12);
+
+  /* Other */
+  --border-color: gray;
+}
+
+/* ==========================================================================
+   2. Base & Global Styles
+   ========================================================================== */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: "Noto Sans", sans-serif;
+}
+
+/* ==========================================================================
+   3. OrderBook Layout
+   ========================================================================== */
+.order-book {
+  width: 360px;
+  margin: 40px auto;
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.order-book-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: left;
+  padding-bottom: 16px;
+}
+
+/* ==========================================================================
+   4. Table Structure
+   ========================================================================== */
+.order-book-headers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 0 8px 8px;
+  font-size: 12px;
+  color: var(--quote-text-color);
+  text-align: right;
+}
+
+.order-book-headers span:first-child {
+  text-align: left;
+}
+
+.sell-orders {
+  margin-bottom: 4px;
+}
+
+.buy-orders {
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   5. Quote Rows
+   ========================================================================== */
+.quote-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 4px 8px;
+  font-size: 14px;
+  position: relative;
+  z-index: 1;
+  text-align: right;
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.quote-row:hover {
+  background-color: var(--quote-hover-bg-color);
+}
+
+.quote-row .price {
+  text-align: left;
+}
+
+.sell-price {
+  color: var(--sell-quote-price-text-color);
+}
+
+.buy-price {
+  color: var(--buy-quote-price-text-color);
+}
+
+.size-cell {
+  border-radius: 2px;
+  display: inline-block;
+  padding: 0 2px;
+}
+
+/* ==========================================================================
+   6. Last Price Separator
+   ========================================================================== */
+.last-price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 12px 0;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  margin: 4px 0;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.last-price.up {
+  color: var(--buy-quote-price-text-color);
+  background-color: var(--last-price-up-bg);
+}
+
+.last-price.down {
+  color: var(--sell-quote-price-text-color);
+  background-color: var(--last-price-down-bg);
+}
+
+.last-price.same {
+  color: var(--quote-text-color);
+  background-color: var(--last-price-same-bg);
+}
+
+/* Arrow Icon in Last Price */
+.last-price .arrow {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  vertical-align: middle;
+  transition: transform 0.3s ease-in-out, background-color 0.3s;
+  mask-image: url("../assets/IconArrowDown.svg");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  background-color: var(
+    --quote-text-color
+  ); /* Default color for 'same' state */
+}
+
+.last-price.up .arrow {
+  transform: rotate(180deg);
+  background-color: var(--buy-quote-price-text-color);
+}
+
+.last-price.down .arrow {
+  background-color: var(--sell-quote-price-text-color);
+}
+
+/* ==========================================================================
+   7. Depth Bars
+   ========================================================================== */
+.depth-bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  z-index: -1;
+  transition: width 0.1s ease-in-out;
+}
+
+.buy-depth {
+  background-color: var(--buy-quote-bar-color);
+}
+
+.sell-depth {
+  background-color: var(--sell-quote-bar-color);
+}
+
+/* ==========================================================================
+   8. Animations
+   ========================================================================== */
+@keyframes flash-new-buy-animation {
+  0% {
+    background-color: var(--flash-green-color);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+@keyframes flash-new-sell-animation {
+  0% {
+    background-color: var(--flash-red-color);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+@keyframes flash-size-up-animation {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: var(--flash-green-color);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+@keyframes flash-size-down-animation {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: var(--flash-red-color);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.flash-new-buy {
+  animation: flash-new-buy-animation 1.5s ease-out;
+}
+
+.flash-new-sell {
+  animation: flash-new-sell-animation 1.5s ease-out;
+}
+
+.flash-size-up {
+  animation: flash-size-up-animation 1.5s ease-out;
+}
+
+.flash-size-down {
+  animation: flash-size-down-animation 1.5s ease-out;
+}
+
+.sell-depth {
+  background-color: var(--sell-quote-bar-color); /* 更新賣單深度條顏色 */
+}
+
+.buy-depth {
+  background-color: var(--buy-quote-bar-color); /* 更新買單深度條顏色 */
+}
