@@ -3,7 +3,7 @@ import { useRef, useCallback, useEffect } from "react";
 interface WebSocketConfig {
   url: string;
   subscribeMessage: object;
-  onMessage: (data: any) => void;
+  onMessage: (data: unknown) => void;
   onConnect?: () => void;
   reconnectOnError?: boolean;
   connectionName?: string;
@@ -17,7 +17,6 @@ export const useWebSocket = (config: WebSocketConfig) => {
 
   const {
     url,
-    reconnectOnError = false,
     connectionName = "WebSocket",
   } = config;
 
@@ -59,7 +58,7 @@ export const useWebSocket = (config: WebSocketConfig) => {
     ws.onerror = (error) => {
       console.error(`${connectionName} error:`, error);
     };
-  }, [url, connectionName, reconnectOnError]);
+  }, [url, connectionName]);
 
   const disconnect = useCallback(() => {
     if (wsRef.current) {

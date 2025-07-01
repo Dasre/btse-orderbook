@@ -125,11 +125,13 @@ const OrderBook: React.FC = () => {
   }, [displayData.buy, displayData.sell]);
 
   useEffect(() => {
+    const timersRef = animationTimers.current;
+
     return () => {
-      animationTimers.current.row.forEach((timerId) => clearTimeout(timerId));
-      animationTimers.current.cell.forEach((timerId) => clearTimeout(timerId));
-      animationTimers.current.row.clear();
-      animationTimers.current.cell.clear();
+      timersRef.row.forEach((timerId) => clearTimeout(timerId));
+      timersRef.cell.forEach((timerId) => clearTimeout(timerId));
+      timersRef.row.clear();
+      timersRef.cell.clear();
     };
   }, []);
 
